@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Swagger OpenAPI Visualizer</title>
+    <link rel="stylesheet" href="swagger.css">
+    <script src="swagger.js" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>Swagger OpenAPI Visualizer</h1>
+            <p>Drag cards on the screen. Node positions are saved in localStorage.</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-row">
+                <select id="mode-selector">
+                    <option value="tag">Domain View (Tag)</option>
+                    <option value="endpoint">Endpoint Flow</option>
+                </select>
+
+                <!-- Visible only for Tag -->
+                <select id="tag-selector"></select>
+
+                <!-- Visible only for Endpoint -->
+                <select id="endpoint-selector" style="display:none;"></select>
+            </div>
+
+            <div class="control-row">
+                <input type="text" id="search-input" placeholder="Search endpoint or model..." />
+
+                <label class="checkbox-container" id="show-models-label">
+                    <input type="checkbox" id="show-models-cb" /> Show models
+                </label>
+            </div>
+
+            <div class="file-loader">
+                <button class="btn btn-alt" id="btn-upload">Load another JSON</button>
+                <button class="btn" id="btn-reset-layout">Reset Layout</button>
+                <span id="loaded-file-name" style="color: var(--warn)">No file loaded</span>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="remember-file-cb" /> Remember file
+                </label>
+                <input type="file" id="file-input" accept=".json" />
+            </div>
+        </div>
+    </header>
+
+    <main id="canvas">
+        <!-- Welcome screen displayed when no file is loaded -->
+        <div id="welcome-message" class="welcome-box">
+            <h2>Welcome to OpenAPI Visualizer</h2>
+            <p>To start visualizing your API specification, upload an OpenAPI/Swagger JSON file.</p>
+            <button class="btn btn-alt" onclick="document.getElementById('file-input').click()">Select Specification File</button>
+        </div>
+
+        <div id="pan-zoom-container">
+            <svg id="wires" aria-hidden="true">
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="5" markerHeight="5"
+                        orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 Z" fill="#38bdf8"></path>
+                    </marker>
+                    <marker id="arrow-purple" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="5" markerHeight="5"
+                        orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 Z" fill="#a78bfa"></path>
+                    </marker>
+                    <marker id="arrow-get" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="5" markerHeight="5"
+                        orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 Z" fill="#10b981"></path>
+                    </marker>
+                    <marker id="arrow-post" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="5" markerHeight="5"
+                        orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 Z" fill="#3b82f6"></path>
+                    </marker>
+                    <marker id="arrow-put" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="5" markerHeight="5"
+                        orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 Z" fill="#d97706"></path>
+                    </marker>
+                    <marker id="arrow-delete" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="5" markerHeight="5"
+                        orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 Z" fill="#ef4444"></path>
+                    </marker>
+                </defs>
+            </svg>
+            <div id="nodes-container"></div>
+        </div>
+    </main>
+
+    <div id="details-drawer" class="drawer">
+        <div class="drawer-header">
+            <h2 id="drawer-title">Details</h2>
+            <button id="drawer-close-btn" aria-label="Close panel">&times;</button>
+        </div>
+        <div class="drawer-content" id="drawer-content">
+            <!-- Populated dynamically -->
+        </div>
+    </div>
+
+    <div class="hint">💡 Double-click a card to view its flow, or click once to open the sidebar with parameter and model details. Card positions are saved automatically.</div>
+
+</body>
+
+</html>
